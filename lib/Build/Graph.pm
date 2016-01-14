@@ -17,7 +17,7 @@ trusts File;
 has Node %.nodes;
 has Plugin %!plugins;
 has Variable %!variables;
-has %!seen;
+has %!seen is Set;
 has Int $!counter = 1;
 
 method !expand(%options, Str:D $key, Int:D $count) {
@@ -144,7 +144,7 @@ method !load-variables(%source, $name) {
 }
 
 method from-hash(%input) {
-	my %seen = %input<seen>.map: { $^key => 1 };
+	my %seen := %input<seen>.Set;
 	my $ret = self.bless(:%seen);
 	for %input<nodes>.kv -> $target, %value {
 		my Node:U $class = ::(%value<type>.tclc);
